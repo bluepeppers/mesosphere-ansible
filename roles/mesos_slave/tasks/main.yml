@@ -1,0 +1,8 @@
+---
+- name: install mesos
+  apt: name=mesos
+  sudo: true
+
+- name: install zookeeper connection file
+  template: src=zk.j2 dest=/etc/mesos/zk
+  sudo: true

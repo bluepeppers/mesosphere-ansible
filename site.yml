@@ -1,0 +1,14 @@
+---
+- hosts: all
+  roles:
+    - common
+    #- zookeeper
+    #- docker
+
+- hosts: mesos_masters
+  roles:
+    - mesos_master
+
+- hosts: mesos_slaves
+  roles:
+    - mesos_slave

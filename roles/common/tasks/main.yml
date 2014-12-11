@@ -1,0 +1,27 @@
+---
+- name: install ansible runtime deps
+  apt: name={{item}}
+  sudo: true
+  with_items:
+    - python-apt
+    - apt-transport-https
+
+- name: install mesosphere apt repository key
+  apt_key: keyserver="{{ MESOSPHERE_REPO_KEYSERVER }}" id="{{ MESOSPHERE_REPO_KEY }}"
+  sudo: true
+
+- name: install mesosphere apt repository
+  apt_repository: repo="deb http://repos.mesosphere.io/{{ DISTRO_NAME }} {{ DISTRO_CODENAME }} main" state=present
+  sudo: true
+
+- name: update apt-get
+  apt: update-cache=yes
+  sudo: true
+
+- name: upgrade system packages
+  apt: upgrade=yes
+  sudo: true
+
+- name: set locale
+  apt: name=language-pack-en state=present
+  sudo: true

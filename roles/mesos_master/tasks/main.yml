@@ -1,0 +1,27 @@
+---
+- name: install mesosphere
+  apt: name=mesosphere
+  sudo: true
+
+- name: install zookeeper connection file
+  template: src=zk.j2 dest=/etc/mesos/zk
+  sudo: true
+
+- name: set zookeeper master id
+  template: src=myid.j2 dest=/etc/zookeeper/conf/myid
+  sudo: true
+
+- name: set zookeeper config
+  template: src=zoo.cfg.j2 dest=/etc/zookeeper/conf/zoo.cfg
+  sudo: true
+
+- name: set zookeeper quorum size
+  template: src=quorum.j2 dest=/etc/mesos-master/quorum
+  sudo: true
+
+- name: set mesos node ip
+  shell: echo "{{ ansible_default_ipv4.address }}" >{{item}}
+  sudo: true
+  with_items:
+    - /etc/mesos-master/ip
+    - /etc/mesos-master/hostname

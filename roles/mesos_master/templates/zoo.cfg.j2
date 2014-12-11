@@ -1,0 +1,8 @@
+{% for host in groups["mesos_masters"] %}
+server.{{ loop.index }}={{ host }}:2888:3888
+{% endfor %}
+
+tickTime=2000
+dataDir=/var/lib/zookeeper
+clientPort=2181
+
