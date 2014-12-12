@@ -3,6 +3,8 @@ import json
 import argparse
 import logging
 import time
+import os.path
+import subprocess
 
 import requests
 import jinja2
@@ -44,6 +46,8 @@ parser.add_argument("-i", "--inventory", type=str, default="mesos_inv",
 
 parser.add_argument("-k", "--ssh", action="append",
                     help="the ssh key to install on the droplets")
+parser.add_argument("-p", "--provision", default=False, action="store_true",
+                    help="run the ansible playbook when done")
 
 parser.add_argument("-r", "--region", type=str, default="lon1",
                     help="the region to create the droplets in")
@@ -51,7 +55,7 @@ parser.add_argument("-d", "--droplet", type=str, default="512mb",
                     help="the size of droplet to create in the cluster")
 parser.add_argument("--private-networking", type=bool, default=True,
                     help="enable private networking on the droplets")
-parser.add_argument("--ipv6", type=bool, default=True,
+parser.add_argument("--ipv6", type=bool, default=False,
                     help="enable ipv6 networking on the droplets")
 parser.add_argument("--cleanup", default=False, action="store_true",
                     help="destroy any created droplets once done")
@@ -168,6 +172,14 @@ if __name__ == "__main__":
             add_ip(droplet, options)
 
         create_template(masters, slaves, options)
+
+        if options.provision:
+            site_filename = os.path.join(
+                os.path.dirname(os.path.dirname(__file__)),
+                "site.yml"
+            )
+            subprocess.call(
+                ["ansible-playbook", site_filename, "-i", options.inventory])
     except:
         cleanup(masters, slaves, options)
         raise
