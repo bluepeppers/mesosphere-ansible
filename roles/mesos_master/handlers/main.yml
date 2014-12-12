@@ -1,0 +1,4 @@
+---
+- name: reload zookeeper
+  service: name=zookeeper enabled=true state=restarted
+  sudo: true

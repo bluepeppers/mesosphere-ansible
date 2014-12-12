@@ -14,6 +14,8 @@
 - name: set zookeeper config
   template: src=zoo.cfg.j2 dest=/etc/zookeeper/conf/zoo.cfg
   sudo: true
+  notify:
+    - reload zookeeper
 
 - name: set zookeeper quorum size
   template: src=quorum.j2 dest=/etc/mesos-master/quorum
@@ -25,3 +27,11 @@
   with_items:
     - /etc/mesos-master/ip
     - /etc/mesos-master/hostname
+
+- name: disable the mesos slave service
+  service: name=mesos-slave enabled=false state=stopped
+  sudo: true
+
+- name: enable the mesos master service
+  service: name=mesos-master enabled=true state=started
+  sudo: true

@@ -6,3 +6,18 @@
 - name: install zookeeper connection file
   template: src=zk.j2 dest=/etc/mesos/zk
   sudo: true
+
+- name: set mesos node ip
+  shell: echo "{{ ansible_default_ipv4.address }}" >{{item}}
+  sudo: true
+  with_items:
+    - /etc/mesos-slave/ip
+    - /etc/mesos-slave/hostname
+    
+- name: disable the mesos master service
+  service: name=mesos-master enabled=false state=stopped
+  sudo: true
+
+- name: enable the mesos slave service
+  service: name=mesos-slave enabled=true state=started
+  sudo: true

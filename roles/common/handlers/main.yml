@@ -1,0 +1,4 @@
+---
+- name: reload dns servers
+  shell: resolvconf -u
+  sudo: true
