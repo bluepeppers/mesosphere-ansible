@@ -35,3 +35,7 @@
 - name: enable the mesos master service
   service: name=mesos-master enabled=true state=started
   sudo: true
+
+- name: enable the marathon service
+  service: name=marathon enabled=true state=started
+  sudo: true
