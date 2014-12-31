@@ -1,4 +1,15 @@
 ---
+- name: change the dns servers
+  lineinfile: dest=/etc/resolvconf/resolv.conf.d/head line="{{item}}"
+  sudo: true
+  with_items:
+    - nameserver 8.8.8.8
+    - nameserver 8.8.4.4
+
+- name: reload dns servers
+  shell: resolvconf -u
+  sudo: true
+
 - name: install ansible runtime deps
   apt: name={{item}}
   sudo: true
@@ -12,6 +23,14 @@
 
 - name: install mesosphere apt repository
   apt_repository: repo="deb http://repos.mesosphere.io/{{ DISTRO_NAME }} {{ DISTRO_CODENAME }} main" state=present
+  sudo: true
+
+- name: install docker apt repository key
+  apt_key: keyserver="{{ DOCKER_REPO_KEYSERVER }}" id="{{ DOCKER_REPO_KEY }}"
+  sudo: true
+
+- name: install docker apt repository
+  apt_repository: repo="deb https://get.docker.com/ubuntu docker main"
   sudo: true
 
 - name: update apt-get

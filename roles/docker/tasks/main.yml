@@ -1,0 +1,8 @@
+---
+- name: install docker
+  apt: name=lxc-docker
+  sudo: true
+
+- name: enable docker
+  service: name=docker enabled=true state=started
+  sudo: true

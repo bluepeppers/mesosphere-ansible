@@ -11,7 +11,7 @@ import jinja2
 
 logging.basicConfig()
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.WARN)
 
 BASE_URL = "https://api.digitalocean.com/v2/"
 IMAGE = 'ubuntu-14-04-x64'
